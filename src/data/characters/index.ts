@@ -1,6 +1,8 @@
-﻿import { Character } from '../../types';
+import { Character } from '../../types';
 import { ryu } from './ryu';
 import { terry } from './terry';
+import { mai } from './mai';
+import { elena } from './elena';
 import { luke } from './luke';
 import { akuma } from './akuma';
 import { ken } from './ken';
@@ -24,10 +26,12 @@ import { honda } from './honda';
 import { dhalsim } from './dhalsim';
 import { lily } from './lily';
 
-// 優先キャラ（リュウ、テリー）を先頭に配置した全24キャラクター一覧
+// 優先キャラ（リュウ、テリー、不知火舞、エレナ）を先頭寄りに配置した全26キャラクター一覧
 export const allCharacters: Character[] = [
   ryu,
   terry,
+  mai,
+  elena,
   luke,
   akuma,
   ken,
@@ -55,3 +59,4 @@ export const allCharacters: Character[] = [
 export const getCharacterById = (id: string): Character | undefined => {
   return allCharacters.find(c => c.id === id);
 };
+

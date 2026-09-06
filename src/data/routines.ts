@@ -1,0 +1,58 @@
+﻿import { GeneralTrainingRoutine } from '../types';
+
+export const generalRoutines: GeneralTrainingRoutine[] = [
+  {
+    id: 'routine_anti_air',
+    title: '【必修】毎日5分の3択対空ルーティン',
+    timeEstimate: '5分',
+    category: '反応・防御',
+    recommendedFrequency: '毎日',
+    description: 'ジャンプだけに意識を割かず、「前ステップ投げ」や「様子見」を混ぜることで、実戦の意識配分の中で確実に対空を落とす反射神経を作ります。',
+    howToSet: '【ダミー設定】スロット1: 前ジャンプ強攻撃（再生比率40%） / スロット2: 前ステップ > 通常投げ（30%） / スロット3: しゃがみガード様子見（30%）。ランダム再生にして、中距離で通常技を振りながら待つ。',
+  },
+  {
+    id: 'routine_impact_react',
+    title: '【必修】牽制技キャンセル ドライブインパクト返し',
+    timeEstimate: '5分',
+    category: '反応・防御',
+    recommendedFrequency: '毎日',
+    description: '立ち回りでしゃがみ中Kや中Pなどの牽制技を振りつつ、相手がインパクトで突っ込んできた瞬間に「見てからインパクト」で返す練習。',
+    howToSet: '【ダミー設定】スロット1: 中攻撃牽制（40%） / スロット2: 前ステップ（30%） / スロット3: ドライブインパクト（30%）。自分のキャンセル可能な中攻撃を当てながら、赤い光を見た瞬間にインパクトボタンを押す。',
+  },
+  {
+    id: 'routine_hit_confirm',
+    title: '【基本】単発・2発ヒット確認（ガード切り替え）',
+    timeEstimate: '5分',
+    category: 'コンボ確認',
+    recommendedFrequency: '対戦前',
+    description: 'しゃがみ中Pやしゃがみ弱P×2を打ち、ダミーがガードしていたら有利技で固めを維持、ヒットしていたらコンボ（必殺技やラッシュ）を完走する。',
+    howToSet: '【ダミー設定】ガード:「ランダムガード」。相手に小技2発を当て、ヒットの黄色いエフェクトが見えた時だけ必殺技に繋ぎ、白ガード時は止める。',
+  },
+  {
+    id: 'routine_shimmy_defense',
+    title: '【中級】起き上がりディレイグラップ（遅らせ投げ抜け）習得',
+    timeEstimate: '7分',
+    category: '反応・防御',
+    recommendedFrequency: '週2〜3回',
+    description: '相手の起き攻めに対して、「打撃ガード」しつつ「投げが来た時だけ抜ける」極意。',
+    howToSet: '【ダミー設定】ダウン復帰時レコード。スロット1: 最速打撃重ね / スロット2: 前歩き投げ。自身はダウンから起き上がる瞬間、ガードを入れつつ「2フレームほど遅らせて弱P+弱K」を押す。打撃はガードでき、投げには抜けが発生する。',
+  },
+  {
+    id: 'routine_fuzzy_mash',
+    title: '【中上級】ファジーコパ（遅らせ暴れ）による連係割り込み',
+    timeEstimate: '7分',
+    category: '反応・防御',
+    recommendedFrequency: '週2〜3回',
+    description: '相手の密着の固め（立ち中Pや小技刻み）のすき間に、ガードしながら少し遅らせて4F小技を押し、相手の前歩き投げや甘い連係を咎める。',
+    howToSet: '【ダミー設定】スロット1: 立ち弱P > 立ち弱P（連続ガード） / スロット2: 立ち弱P > 前歩き投げ。初段をガードした直後にわずかに遅れて弱Pをこする。',
+  },
+  {
+    id: 'routine_honda_blanka',
+    title: '【キャラ対策】突進技（頭突き・ローリング）ジャストパリィ & 確反',
+    timeEstimate: '5分',
+    category: '反応・防御',
+    recommendedFrequency: '対戦前',
+    description: 'エドモンド本田のスーパー頭突きや百貫落とし、ブランカのローリングアタックを安定してジャストパリィし、パニカン反撃を取る。',
+    howToSet: '【ダミー（本田やブランカ）設定】スロット1: 弱頭突き / スロット2: 強頭突き / スロット3: 百貫落とし。タイミングを合わせてパリィボタンを押し、ジャスト音が鳴ったら前ステ最大コンボ。',
+  },
+];

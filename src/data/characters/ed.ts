@@ -1,0 +1,132 @@
+﻿import { Character } from '../../types';
+
+export const ed: Character = {
+  id: 'ed',
+  name: 'エド',
+  englishName: 'Ed',
+  epithet: 'サイコボクサー',
+  archetype: 'リーチ・中距離制圧',
+  difficulty: '★★★☆☆',
+  themeColor: 'from-blue-500 via-indigo-700 to-purple-900',
+  accentColor: '#3b82f6',
+  avatarIcon: 'ED',
+  stats: {
+    power: 4,
+    range: 5,
+    mobility: 4,
+    defense: 3,
+    antiAir: 4,
+    easeOfUse: 4,
+  },
+  summary: 'サイコパワーとボクシングを融合させた中距離の支配者。「フリッカー（サイコフリッカー）」による遠距離からの引き寄せや、判定の長い立ち強P、そしてSA2（サイコキャノン）を絡めたドリームコンボが最大の強み。',
+  strengths: [
+    '「サイコフリッカー」の長射程牽制とホールド時の引き寄せ性能',
+    '「SA2 サイコキャノン」を使った超火力コンボと無敵切り返し',
+    '立ち弱P・立ち中Pのリーチと連射速度が優秀',
+  ],
+  weaknesses: [
+    '通常技の下段（しゃがみ中K）からキャンセルラッシュができない',
+    '対空サイコアッパーの入力に慣れが必要',
+  ],
+  modernEvaluation: {
+    rating: 'A',
+    comment: 'ワンボタンSA2（サイコキャノン）による切り返し・起き攻めが非常に強力。ワンボタン対空サイコアッパーも機能する。ただしフリッカーの方向撃ち分けや弱中強の細かな使い分けでクラシックに分がある。',
+    pros: ['ワンボタンSA2による絶対的切り返し', 'ワンボタン対空'],
+    cons: ['フリッカーの弱中強の弾道撃ち分けが制限される'],
+    lostImportantMoves: ['立ち強K', 'しゃがみ中K（アシスト併用）'],
+  },
+  keyMoves: [
+    {
+      name: 'サイコフリッカー',
+      commandC: '236 + P（ホールド可）',
+      commandM: 'SP（ホールド可）',
+      usage: '中〜遠距離の主力牽制。ホールドすると相手を引き寄せてコンボへ。',
+      frame: { startup: '12F〜', onBlock: '-4F〜', onHit: '引き寄せ/ダウン' },
+    },
+    {
+      name: 'サイコアッパー',
+      commandC: '623 + P',
+      commandM: '6 + SP',
+      usage: '対空必殺技。強版は対空無敵、OD版は完全無敵。',
+      frame: { startup: '6F', onBlock: '-24F', onHit: 'ダウン' },
+    },
+    {
+      name: '立ち強P',
+      commandC: '強P',
+      commandM: '強',
+      usage: '超長射程のストレート。相手の技の出鼻を挫く中距離の要。',
+      frame: { startup: '10F', onBlock: '-5F', onHit: '+2F' },
+    },
+  ],
+  gameplan: {
+    farRange: 'サイコフリッカーを撃ち分け、相手のジャンプを誘ってサイコアッパーで落とす。',
+    midRange: '立ち強Pと立ち弱Pで相手のラッシュを止め、フリッカーホールドで引き寄せる。',
+    closeRange: '立ち弱P刻みから投げとシミー。SA2ゲージが溜まったらサイコキャノンで大逆転を狙う。',
+    breakStalemate: [
+      {
+        title: 'サイコフリッカー（ホールド）での引き寄せ',
+        description: '相手がガードを固めているところにホールド版を当て、強制的に密着有利を作って崩す。',
+      },
+      {
+        title: 'SA2 サイコキャノン設置攻め',
+        description: 'ゆっくり進む弾を盾にして前進し、中段・下段・投げの三重択を迫る。',
+      },
+    ],
+    burnoutOffense: ['SA2サイコキャノンをガードさせてスタン確定連携。'],
+    burnoutDefense: ['SA1またはSA2の完全無敵で切り返す。'],
+  },
+  combos: [
+    {
+      id: 'ed_c1',
+      category: '基礎（小技始動・暴れ・確反）',
+      name: '小技確認サイコアッパー',
+      classicRecipe: '2弱P > 5弱P > 623強P',
+      modernRecipe: '2弱 > 弱 > 6+SP',
+      damageApprox: '約1,380',
+      driveCost: 0,
+      superArtCost: 0,
+      difficulty: 1,
+      purpose: '4F暴れからのノーゲージ基本。',
+    },
+    {
+      id: 'ed_c2',
+      category: 'SA3 / CA リーサル',
+      name: 'フリッカー引き寄せ SA3リーサル',
+      classicRecipe: 'サイコフリッカー(ホールド) > 5強P > 623強P > SA3',
+      modernRecipe: 'SP(ホールド) > アシスト強 > 6+SP > 強+SP(SA3)',
+      damageApprox: '約4,500',
+      driveCost: 0,
+      superArtCost: 3,
+      difficulty: 2,
+      purpose: '中距離から相手を引き寄せて即座に試合を終わらせる。',
+    },
+  ],
+  trainingDrills: [
+    {
+      id: 'ed_drill_1',
+      title: 'SA2サイコキャノンからのコンボループ',
+      category: 'セットプレイ',
+      importance: '必修',
+      description: 'SA2発動後、弾のヒットに合わせて通常技を刻み、最大ダメージを出す練習。',
+      practiceGoal: 'SA2からノーゲージで3,500以上のダメージを出せるようにする。',
+      dummySettings: { guardSetting: 'すべてガード' },
+    },
+  ],
+  matchups: [
+    {
+      opponentId: 'ryu',
+      opponentName: 'リュウ',
+      advantageLevel: '五分',
+      coreStrategy: 'リュウの波動拳に対してサイコフリッカーのリーチで牽制し、中距離の差し合いを制する。',
+      keyThreats: ['電刃練気波動拳', '強昇龍拳'],
+      punishList: [
+        {
+          opponentMove: '強 昇龍拳（ガード後）',
+          frameAdvantage: '-23F',
+          recommendedPunish: '5強Pパニカン始動フルコンボ',
+        },
+      ],
+      practicalTips: ['リュウの中足の間合いの外から立ち強Pを当てていく。'],
+    },
+  ],
+};

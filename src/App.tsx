@@ -26,8 +26,14 @@ export const App: React.FC = () => {
     return localStorage.getItem('sf6_selected_char') || 'ryu';
   });
 
-  const [activeTab, setActiveTab] = useState<TabType>('overview');
+  const [activeTab, setActiveTab] = useState<TabType>(() => {
+    const params = new URLSearchParams(window.location.search);
+    const qTab = params.get('tab') as TabType;
+    if (['overview', 'combos', 'strategy', 'matchup', 'training', 'notes'].includes(qTab)) return qTab;
+    return 'overview';
+  });
   const [searchQuery, setSearchQuery] = useState<string>('');
+
   const [completedDrillIds, setCompletedDrillIds] = useState<string[]>(() => {
     const saved = localStorage.getItem('sf6_completed_drills');
     return saved ? JSON.parse(saved) : [];

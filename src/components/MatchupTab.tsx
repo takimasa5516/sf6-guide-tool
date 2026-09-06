@@ -1,33 +1,46 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Character } from '../types';
-import { ShieldAlert, Crosshair, Sparkles, Swords } from 'lucide-react';
+import { allCharacters } from '../data/characters';
+import { ShieldAlert, Crosshair, Sparkles, Swords, Search } from 'lucide-react';
 import { formatCommandToArrows } from '../utils/commandFormatter';
+import { getMatchupAdviceForPair } from '../utils/matchupHelper';
 
 interface MatchupTabProps {
   character: Character;
 }
 
 export const MatchupTab: React.FC<MatchupTabProps> = ({ character }) => {
-  const { matchups } = character;
-  const [selectedOpponentId, setSelectedOpponentId] = useState<string>(
-    matchups.length > 0 ? matchups[0].opponentId : ''
-  );
+  // 自分以外の全30キャラクターを対戦相手候補として取得
+  const opponentCandidates = useMemo(() => {
+    return allCharacters.filter((c) => c.id !== character.id);
+  }, [character.id]);
 
-  if (!matchups || matchups.length === 0) {
-    return (
-      <div className="p-8 text-center text-slate-400 bg-[#121724] rounded-2xl border border-slate-800">
-        <Swords className="w-10 h-10 text-slate-600 mx-auto mb-2" />
-        <p className="font-bold text-white">キャラ対策データ準備中</p>
-        <p className="text-xs text-slate-400 mt-1">
-          {character.name}の対戦相手別対策データは今後順次拡充予定です。
-        </p>
-      </div>
+  const [selectedOpponentId, setSelectedOpponentId] = useState<string>(() => {
+    return opponentCandidates[0]?.id || '';
+  });
+
+  const [opponentSearch, setOpponentSearch] = useState<string>('');
+
+  // 検索フィルター適用
+  const filteredOpponents = useMemo(() => {
+    if (!opponentSearch.trim()) return opponentCandidates;
+    const q = opponentSearch.toLowerCase();
+    return opponentCandidates.filter(
+      (c) => c.name.toLowerCase().includes(q) || c.englishName.toLowerCase().includes(q)
     );
-  }
+  }, [opponentCandidates, opponentSearch]);
 
-  // 選択中の対戦カード
-  const currentMatchup =
-    matchups.find((m) => m.opponentId === selectedOpponentId) || matchups[0];
+  const selectedOpponent = useMemo(() => {
+    return (
+      opponentCandidates.find((c) => c.id === selectedOpponentId) || opponentCandidates[0]
+    );
+  }, [opponentCandidates, selectedOpponentId]);
+
+  // マッチアップ対策データを動的取得
+  const currentMatchup = useMemo(() => {
+    if (!selectedOpponent) return null;
+    return getMatchupAdviceForPair(character, selectedOpponent);
+  }, [character, selectedOpponent]);
 
   const getAdvantageBadge = (level: string) => {
     switch (level) {
@@ -44,35 +57,54 @@ export const MatchupTab: React.FC<MatchupTabProps> = ({ character }) => {
     }
   };
 
+  if (!currentMatchup || !selectedOpponent) {
+    return null;
+  }
+
   return (
     <div className="space-y-6">
-      {/* 相手キャラクター選択ボタン一覧 */}
-      <div className="rounded-2xl bg-[#121724] border border-slate-800 p-4">
-        <div className="text-xs text-slate-400 font-bold mb-2.5 flex items-center gap-1.5">
-          <Swords className="w-4 h-4 text-orange-400" />
-          対策したい相手キャラクターを選択:
+      {/* 相手キャラクター選択エリア（全30キャラクター完全網羅） */}
+      <div className="rounded-2xl bg-[#121724] border border-slate-800 p-4 sm:p-5">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3.5">
+          <div className="text-xs text-slate-400 font-bold flex items-center gap-1.5">
+            <Swords className="w-4 h-4 text-orange-400" />
+            <span>対策したい対戦相手を選択（全30キャラ対応）:</span>
+          </div>
+
+          {/* 相手検索ミニバー */}
+          <div className="relative w-full sm:w-60">
+            <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2" />
+            <input
+              type="text"
+              value={opponentSearch}
+              onChange={(e) => setOpponentSearch(e.target.value)}
+              placeholder="相手キャラ名で検索..."
+              className="w-full pl-8 pr-3 py-1 text-xs bg-slate-900 border border-slate-800 rounded-lg text-slate-200 placeholder-slate-500 focus:outline-none focus:border-orange-500"
+            />
+          </div>
         </div>
-        <div className="flex flex-wrap gap-2">
-          {matchups.map((m) => {
-            const isSelected = m.opponentId === currentMatchup.opponentId;
+
+        {/* キャラクターボタン一覧 */}
+        <div className="flex flex-wrap gap-2 max-h-48 sm:max-h-56 overflow-y-auto no-scrollbar p-1">
+          {filteredOpponents.map((opp) => {
+            const isSelected = opp.id === selectedOpponent.id;
             return (
               <button
-                key={m.opponentId}
-                onClick={() => setSelectedOpponentId(m.opponentId)}
-                className={`flex items-center gap-2 px-3 py-1.5 rounded-xl border text-xs font-bold transition-all ${
+                key={opp.id}
+                onClick={() => setSelectedOpponentId(opp.id)}
+                className={`flex items-center gap-2 px-3 py-1.5 rounded-xl border text-xs font-bold transition-all shrink-0 select-none ${
                   isSelected
                     ? 'bg-orange-500 text-white border-orange-400 shadow-md shadow-orange-500/20 scale-[1.02]'
                     : 'bg-slate-900 text-slate-300 border-slate-800 hover:border-slate-700 hover:text-white'
                 }`}
               >
-                <span>vs {m.opponentName}</span>
-                <span
-                  className={`text-[10px] px-1 rounded font-normal ${
-                    isSelected ? 'bg-black/30 text-white' : getAdvantageBadge(m.advantageLevel)
-                  }`}
+                {/* ミニアイコン */}
+                <div
+                  className={`w-5 h-5 rounded-md bg-gradient-to-br ${opp.themeColor} flex items-center justify-center font-black text-white text-[9px] tracking-tighter`}
                 >
-                  {m.advantageLevel}
-                </span>
+                  {opp.avatarIcon.substring(0, 2)}
+                </div>
+                <span>vs {opp.name}</span>
               </button>
             );
           })}
@@ -109,7 +141,7 @@ export const MatchupTab: React.FC<MatchupTabProps> = ({ character }) => {
           <div className="rounded-2xl bg-[#121724] border border-slate-800 p-4 sm:p-5">
             <h4 className="text-xs sm:text-sm font-bold text-red-400 mb-3 flex items-center gap-2">
               <ShieldAlert className="w-4 h-4" />
-              相手の警戒すべき主力技・戦術
+              相手（{currentMatchup.opponentName}）の警戒すべき主力技・戦術
             </h4>
             <ul className="space-y-2 text-xs text-slate-300">
               {currentMatchup.keyThreats.map((threat, i) => (

@@ -1,6 +1,6 @@
 import React from 'react';
 import { ControlType } from '../types';
-import { Gamepad2, Search, Timer } from 'lucide-react';
+import { Gamepad2, Search, Timer, Sun, Moon } from 'lucide-react';
 
 interface HeaderProps {
   controlType: ControlType;
@@ -8,6 +8,8 @@ interface HeaderProps {
   searchQuery: string;
   setSearchQuery: (query: string) => void;
   openTimerModal: () => void;
+  theme: 'dark' | 'light';
+  toggleTheme: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -16,7 +18,10 @@ export const Header: React.FC<HeaderProps> = ({
   searchQuery,
   setSearchQuery,
   openTimerModal,
+  theme,
+  toggleTheme,
 }) => {
+
   return (
     <header className="sticky top-0 z-40 bg-[#0c0f17]/90 backdrop-blur-md border-b border-slate-800">
       <div className="max-w-7xl mx-auto px-3 sm:px-6 py-2.5 flex flex-wrap items-center justify-between gap-2">
@@ -66,6 +71,25 @@ export const Header: React.FC<HeaderProps> = ({
             </button>
           </div>
 
+          {/* テーマ切替トグル（ライト / ダーク） */}
+          <button
+            onClick={toggleTheme}
+            className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition"
+            title={theme === 'dark' ? 'ライトモードに切り替え' : 'ダークモードに切り替え'}
+          >
+            {theme === 'dark' ? (
+              <>
+                <Sun className="w-3.5 h-3.5 text-amber-400" />
+                <span className="hidden sm:inline">ライト</span>
+              </>
+            ) : (
+              <>
+                <Moon className="w-3.5 h-3.5 text-indigo-600" />
+                <span className="hidden sm:inline">ダーク</span>
+              </>
+            )}
+          </button>
+
           {/* トレモタイマー起動ボタン */}
           <button
             onClick={openTimerModal}
@@ -77,6 +101,7 @@ export const Header: React.FC<HeaderProps> = ({
           </button>
         </div>
       </div>
+
 
       {/* 検索バー（モバイルでも押しやすい位置） */}
       <div className="px-3 sm:px-6 pb-2 max-w-7xl mx-auto">

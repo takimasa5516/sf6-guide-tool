@@ -35,6 +35,14 @@ export const App: React.FC = () => {
 
   const [isTimerOpen, setIsTimerOpen] = useState<boolean>(false);
 
+  const [theme, setTheme] = useState<'dark' | 'light'>(() => {
+    const params = new URLSearchParams(window.location.search);
+    const qTheme = params.get('theme');
+    if (qTheme === 'light' || qTheme === 'dark') return qTheme;
+    return (localStorage.getItem('sf6_theme') as 'dark' | 'light') || 'dark';
+  });
+
+
   useEffect(() => {
     localStorage.setItem('sf6_control_type', controlType);
   }, [controlType]);
@@ -46,6 +54,21 @@ export const App: React.FC = () => {
   useEffect(() => {
     localStorage.setItem('sf6_completed_drills', JSON.stringify(completedDrillIds));
   }, [completedDrillIds]);
+
+  useEffect(() => {
+    localStorage.setItem('sf6_theme', theme);
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+      document.documentElement.classList.remove('light');
+    } else {
+      document.documentElement.classList.remove('dark');
+      document.documentElement.classList.add('light');
+    }
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
+  };
 
   const toggleCompleteDrill = (id: string) => {
     setCompletedDrillIds((prev) =>
@@ -73,7 +96,10 @@ export const App: React.FC = () => {
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
         openTimerModal={() => setIsTimerOpen(true)}
+        theme={theme}
+        toggleTheme={toggleTheme}
       />
+
 
       {/* キャラクター選択バー（リュウ・テリーが最優先） */}
       <CharacterBar

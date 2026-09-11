@@ -11,10 +11,11 @@ import { StrategyTab } from './components/StrategyTab';
 import { MatchupTab } from './components/MatchupTab';
 import { TrainingTab } from './components/TrainingTab';
 import { NotesTab } from './components/NotesTab';
+import { TrainingManual } from './components/TrainingManual';
 import { TimerModal } from './components/TimerModal';
-import { BookOpen, Flame, Compass, Target, Edit3, Swords } from 'lucide-react';
+import { BookOpen, Flame, Compass, Target, Edit3, Swords, HelpCircle } from 'lucide-react';
 
-type TabType = 'overview' | 'combos' | 'strategy' | 'matchup' | 'training' | 'notes';
+type TabType = 'overview' | 'combos' | 'strategy' | 'matchup' | 'training' | 'notes' | 'manual';
 
 export const App: React.FC = () => {
   const [controlType, setControlType] = useState<ControlType>(() => {
@@ -29,7 +30,7 @@ export const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<TabType>(() => {
     const params = new URLSearchParams(window.location.search);
     const qTab = params.get('tab') as TabType;
-    if (['overview', 'combos', 'strategy', 'matchup', 'training', 'notes'].includes(qTab)) return qTab;
+    if (['overview', 'combos', 'strategy', 'matchup', 'training', 'notes', 'manual'].includes(qTab)) return qTab;
     return 'overview';
   });
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -90,6 +91,7 @@ export const App: React.FC = () => {
     { id: 'strategy', label: '立ち回り・打開', icon: <Compass className="w-4 h-4" /> },
     { id: 'matchup', label: 'キャラ対策', icon: <Swords className="w-4 h-4" /> },
     { id: 'training', label: 'トレモ設定', icon: <Target className="w-4 h-4" /> },
+    { id: 'manual', label: 'トレモ操作手順', icon: <HelpCircle className="w-4 h-4" /> },
     { id: 'notes', label: '課題ノート', icon: <Edit3 className="w-4 h-4" /> },
   ];
 
@@ -157,8 +159,10 @@ export const App: React.FC = () => {
               proLessons={proTrainingLessons}
               completedDrillIds={completedDrillIds}
               toggleCompleteDrill={toggleCompleteDrill}
+              onOpenManual={() => setActiveTab('manual')}
             />
           )}
+          {activeTab === 'manual' && <TrainingManual />}
           {activeTab === 'notes' && <NotesTab character={currentCharacter} />}
         </div>
       </main>

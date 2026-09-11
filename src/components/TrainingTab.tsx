@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Character, GeneralTrainingRoutine, ProTrainingLesson } from '../types';
-import { Target, CheckSquare, Square, Sliders, Clock, CheckCircle2, ChevronDown, ChevronUp, Video, Sparkles } from 'lucide-react';
+import { Target, CheckSquare, Square, Sliders, Clock, CheckCircle2, ChevronDown, ChevronUp, Video, Sparkles, HelpCircle } from 'lucide-react';
 
 interface TrainingTabProps {
   character: Character;
@@ -8,6 +8,7 @@ interface TrainingTabProps {
   proLessons: ProTrainingLesson[];
   completedDrillIds: string[];
   toggleCompleteDrill: (id: string) => void;
+  onOpenManual?: () => void;
 }
 
 export const TrainingTab: React.FC<TrainingTabProps> = ({
@@ -16,6 +17,7 @@ export const TrainingTab: React.FC<TrainingTabProps> = ({
   proLessons,
   completedDrillIds,
   toggleCompleteDrill,
+  onOpenManual,
 }) => {
   const [isGuideExpanded, setIsGuideExpanded] = useState<boolean>(true);
   const [selectedLessonId, setSelectedLessonId] = useState<string>(
@@ -81,22 +83,33 @@ export const TrainingTab: React.FC<TrainingTabProps> = ({
               </p>
             </div>
           </div>
-          <button
-            onClick={() => setIsGuideExpanded(!isGuideExpanded)}
-            className="flex items-center gap-1 text-xs text-amber-400 hover:text-amber-300 px-2 py-1 rounded-lg bg-slate-900 border border-slate-800"
-          >
-            {isGuideExpanded ? (
-              <>
-                <span>閉じる</span>
-                <ChevronUp className="w-3.5 h-3.5" />
-              </>
-            ) : (
-              <>
-                <span>詳細を見る</span>
-                <ChevronDown className="w-3.5 h-3.5" />
-              </>
+          <div className="flex items-center gap-2">
+            {onOpenManual && (
+              <button
+                onClick={onOpenManual}
+                className="hidden sm:flex items-center gap-1.5 text-xs text-amber-300 hover:text-amber-200 px-3 py-1.5 rounded-xl bg-amber-500/10 border border-amber-500/40 font-bold transition shadow-sm"
+              >
+                <HelpCircle className="w-3.5 h-3.5 text-amber-400" />
+                <span>画面操作マニュアル</span>
+              </button>
             )}
-          </button>
+            <button
+              onClick={() => setIsGuideExpanded(!isGuideExpanded)}
+              className="flex items-center gap-1 text-xs text-amber-400 hover:text-amber-300 px-2.5 py-1.5 rounded-lg bg-slate-900 border border-slate-800"
+            >
+              {isGuideExpanded ? (
+                <>
+                  <span>閉じる</span>
+                  <ChevronUp className="w-3.5 h-3.5" />
+                </>
+              ) : (
+                <>
+                  <span>詳細を見る</span>
+                  <ChevronDown className="w-3.5 h-3.5" />
+                </>
+              )}
+            </button>
+          </div>
         </div>
 
         {isGuideExpanded && (
@@ -224,9 +237,20 @@ export const TrainingTab: React.FC<TrainingTabProps> = ({
 
                 {/* 具体的な設定手順 */}
                 <div className="ml-7 p-2.5 rounded-xl bg-slate-950/80 border border-slate-800 text-[11px] text-slate-300">
-                  <div className="flex items-center gap-1 font-bold text-amber-400 mb-1">
-                    <Sliders className="w-3.5 h-3.5" />
-                    トレモ設定の具体的手順
+                  <div className="flex items-center justify-between mb-1">
+                    <div className="flex items-center gap-1 font-bold text-amber-400">
+                      <Sliders className="w-3.5 h-3.5" />
+                      トレモ設定の具体的手順
+                    </div>
+                    {onOpenManual && (
+                      <button
+                        onClick={onOpenManual}
+                        className="text-[10px] text-amber-400 hover:text-amber-300 underline font-semibold flex items-center gap-0.5"
+                      >
+                        <HelpCircle className="w-3 h-3" />
+                        <span>操作マニュアル</span>
+                      </button>
+                    )}
                   </div>
                   <div className="text-slate-300 leading-relaxed font-mono">
                     {routine.howToSet}
@@ -318,9 +342,20 @@ export const TrainingTab: React.FC<TrainingTabProps> = ({
 
                     {drill.dummySettings.recordSlots && (
                       <div className="mt-2 pt-2 border-t border-slate-800/60">
-                        <span className="text-slate-400 font-semibold block mb-1.5">
-                          ダミーへのレコードスロット登録:
-                        </span>
+                        <div className="flex items-center justify-between mb-1.5 flex-wrap gap-1">
+                          <span className="text-slate-400 font-semibold">
+                            ダミーへのレコードスロット登録:
+                          </span>
+                          {onOpenManual && (
+                            <button
+                              onClick={onOpenManual}
+                              className="text-[11px] text-amber-400 hover:text-amber-300 font-bold flex items-center gap-1 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20 transition hover:bg-amber-500/20"
+                            >
+                              <HelpCircle className="w-3 h-3 text-amber-400" />
+                              <span>スロット設定の操作手順を見る</span>
+                            </button>
+                          )}
+                        </div>
                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                           {drill.dummySettings.recordSlots.map((slot) => (
                             <div key={slot.slotNumber} className="p-2 rounded bg-slate-900 border border-slate-800 text-[11px]">

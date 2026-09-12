@@ -322,3 +322,6 @@ export const getMatchupAdviceForPair = (
     practicalTips: combinedTips,
   };
 };
+
+export const getMatchupAdvice = getMatchupAdviceForPair;
+

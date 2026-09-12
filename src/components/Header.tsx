@@ -1,6 +1,6 @@
 import React from 'react';
 import { ControlType } from '../types';
-import { Gamepad2, Search, Timer, Sun, Moon } from 'lucide-react';
+import { Gamepad2, Search, Timer, Sun, Moon, Zap } from 'lucide-react';
 
 interface HeaderProps {
   controlType: ControlType;
@@ -8,6 +8,7 @@ interface HeaderProps {
   searchQuery: string;
   setSearchQuery: (query: string) => void;
   openTimerModal: () => void;
+  openMatchReadyModal: () => void;
   theme: 'dark' | 'light';
   toggleTheme: () => void;
 }
@@ -18,6 +19,7 @@ export const Header: React.FC<HeaderProps> = ({
   searchQuery,
   setSearchQuery,
   openTimerModal,
+  openMatchReadyModal,
   theme,
   toggleTheme,
 }) => {
@@ -88,6 +90,16 @@ export const Header: React.FC<HeaderProps> = ({
                 <span className="hidden sm:inline">ダーク</span>
               </>
             )}
+          </button>
+
+          {/* 対戦直前クイックチートシート起動ボタン */}
+          <button
+            onClick={openMatchReadyModal}
+            className="flex items-center gap-1.5 px-3 py-1 text-xs font-black rounded-lg bg-gradient-to-r from-orange-500 to-amber-500 text-slate-950 shadow-md shadow-orange-500/20 hover:scale-105 active:scale-95 transition shrink-0"
+            title="対戦直前クイックチートシート（30秒要点まとめ）"
+          >
+            <Zap className="w-3.5 h-3.5 fill-slate-950" />
+            <span>対戦直前</span>
           </button>
 
           {/* トレモタイマー起動ボタン */}

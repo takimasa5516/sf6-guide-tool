@@ -12,10 +12,12 @@ import { MatchupTab } from './components/MatchupTab';
 import { TrainingTab } from './components/TrainingTab';
 import { NotesTab } from './components/NotesTab';
 import { TrainingManual } from './components/TrainingManual';
+import { QuizTab } from './components/QuizTab';
+import { MatchReadyModal } from './components/MatchReadyModal';
 import { TimerModal } from './components/TimerModal';
-import { BookOpen, Flame, Compass, Target, Edit3, Swords, HelpCircle } from 'lucide-react';
+import { BookOpen, Flame, Compass, Target, Edit3, Swords, HelpCircle, Zap } from 'lucide-react';
 
-type TabType = 'overview' | 'combos' | 'strategy' | 'matchup' | 'training' | 'notes' | 'manual';
+type TabType = 'overview' | 'combos' | 'strategy' | 'matchup' | 'training' | 'manual' | 'quiz' | 'notes';
 
 export const App: React.FC = () => {
   const [controlType, setControlType] = useState<ControlType>(() => {
@@ -30,7 +32,7 @@ export const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<TabType>(() => {
     const params = new URLSearchParams(window.location.search);
     const qTab = params.get('tab') as TabType;
-    if (['overview', 'combos', 'strategy', 'matchup', 'training', 'notes', 'manual'].includes(qTab)) return qTab;
+    if (['overview', 'combos', 'strategy', 'matchup', 'training', 'notes', 'manual', 'quiz'].includes(qTab)) return qTab;
     return 'overview';
   });
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -41,6 +43,7 @@ export const App: React.FC = () => {
   });
 
   const [isTimerOpen, setIsTimerOpen] = useState<boolean>(false);
+  const [isMatchReadyOpen, setIsMatchReadyOpen] = useState<boolean>(false);
 
   const [theme, setTheme] = useState<'dark' | 'light'>(() => {
     const params = new URLSearchParams(window.location.search);
@@ -92,6 +95,7 @@ export const App: React.FC = () => {
     { id: 'matchup', label: 'キャラ対策', icon: <Swords className="w-4 h-4" /> },
     { id: 'training', label: 'トレモ設定', icon: <Target className="w-4 h-4" /> },
     { id: 'manual', label: 'トレモ操作手順', icon: <HelpCircle className="w-4 h-4" /> },
+    { id: 'quiz', label: '確反クイズ', icon: <Zap className="w-4 h-4" /> },
     { id: 'notes', label: '課題ノート', icon: <Edit3 className="w-4 h-4" /> },
   ];
 
@@ -104,6 +108,7 @@ export const App: React.FC = () => {
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
         openTimerModal={() => setIsTimerOpen(true)}
+        openMatchReadyModal={() => setIsMatchReadyOpen(true)}
         theme={theme}
         toggleTheme={toggleTheme}
       />
@@ -163,6 +168,7 @@ export const App: React.FC = () => {
             />
           )}
           {activeTab === 'manual' && <TrainingManual />}
+          {activeTab === 'quiz' && <QuizTab />}
           {activeTab === 'notes' && <NotesTab character={currentCharacter} />}
         </div>
       </main>
@@ -185,6 +191,14 @@ export const App: React.FC = () => {
 
       {/* トレモタイマーモーダル */}
       <TimerModal isOpen={isTimerOpen} onClose={() => setIsTimerOpen(false)} />
+
+      {/* 対戦直前クイックチートシートモーダル */}
+      <MatchReadyModal
+        isOpen={isMatchReadyOpen}
+        onClose={() => setIsMatchReadyOpen(false)}
+        playerCharacter={currentCharacter}
+        allCharacters={allCharacters}
+      />
     </div>
   );
 };
